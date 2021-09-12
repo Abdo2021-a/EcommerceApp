@@ -7,11 +7,11 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("ProductDetails"),
+        title: Text("prodct detalsssssss"),
       ),
       body: Container(
         child: Center(
-          child: Text("ProductDetailsScreen"),
+          child: Text("detalsssssss"),
         ),
       ),
     );

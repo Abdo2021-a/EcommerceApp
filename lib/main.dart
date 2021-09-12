@@ -6,6 +6,7 @@ import 'Providers/auth.dart';
 import 'Providers/card.dart';
 import 'Providers/orders.dart';
 import 'Providers/products.dart';
+import 'Screens/auth_screen.dart';
 import 'Screens/card_screen.dart';
 import 'Screens/edit_product_screen.dart';
 import 'Screens/orders_screen.dart';
@@ -31,7 +32,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         theme: ThemeData(primaryColor: Colors.purple, fontFamily: "Lato"),
         debugShowCheckedModeBanner: false,
-        home: ProductDetailsScreen(),
+        home: AuthScreen(),
         routes: {
           ProductDetailsScreen.Productdetailsscreen_routename: (_) {
             return ProductDetailsScreen();
@@ -47,7 +48,10 @@ class MyApp extends StatelessWidget {
           },
           EditProductScreen.editproduct_routename: (_) {
             return EditProductScreen();
-          }
+          },
+          AuthScreen.authscreen_routename: (_) {
+            return AuthScreen();
+          },
         },
       ),
     );
