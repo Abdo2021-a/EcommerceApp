@@ -1,6 +1,10 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:provider/provider.dart';
+import 'package:shopapp/Models/http_exceptios.dart';
+import 'package:shopapp/Providers/auth.dart';
 
 class AuthScreen extends StatelessWidget {
   static const authscreen_routename = "/auth-screen";
@@ -81,18 +85,53 @@ class _AuthCardState extends State<AuthCard> {
   };
   bool _isloding = false;
   Future<void> _submit() async {
-    if (!_formkey.currentState.validate()) {
-      return;
+    // Focus.of(context).unfocus();
+    if (_formkey.currentState.validate()) {
+      _formkey.currentState.save();
+      setState(() {
+        _isloding = true;
+      });
     }
-    print("lw eshta8let fana 7mar ");
-    setState(() {
-      _isloding = true;
-    });
-    try {} catch (eror) {}
 
-    // setState(() {
-    //   _isloding = false;
-    // });
+    try {
+      if (_authmode == Authmode.login) {
+        await Provider.of<Auth>(context, listen: false)
+            .authLogin(_authdata["email"], _authdata["password"]);
+      } else {
+        await Provider.of<Auth>(context, listen: false)
+            .authSignup(_authdata["email"], _authdata["password"]);
+      }
+    } on HttpException catch (errors) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text(errors.toString()),
+        backgroundColor: Colors.black26,
+
+//         Theme.of(ctx).splashColor,
+      ));
+      // Fluttertoast.showToast(
+      //     msg: "safmknlkdsfsakdl;fm;lsdkmfl;sd",
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: Colors.red,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0);
+      print(" this is eror in exception $errors");
+    } catch (eror) {
+      Fluttertoast.showToast(
+          msg: eror,
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      print(" this is eror in second $eror");
+    }
+
+    setState(() {
+      _isloding = false;
+    });
   }
 
   _switchAuthMode() {
@@ -144,6 +183,7 @@ class _AuthCardState extends State<AuthCard> {
                 height: 20,
               ),
               TextFormField(
+                obscureText: true,
                 onSaved: (value) {
                   _authdata["password"] = value;
                 },
@@ -173,6 +213,7 @@ class _AuthCardState extends State<AuthCard> {
                 Padding(
                   padding: const EdgeInsets.only(bottom: 20),
                   child: TextFormField(
+                    obscureText: true,
                     validator: (val) {
                       if (val.isEmpty ||
                           val != _textEditingController_password.text) {
