@@ -32,6 +32,7 @@ class MyApp extends StatelessWidget {
       ],
       child: Consumer<Auth>(
         builder: (context, snap, _) {
+          // print("its run now");
           return MaterialApp(
             theme: ThemeData(primaryColor: Colors.purple, fontFamily: "Lato"),
             debugShowCheckedModeBanner: false,

@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shopapp/Models/http_exceptios.dart';
 import 'package:shopapp/Providers/auth.dart';
+import 'package:shopapp/Screens/product_overview_screen.dart';
 
 class AuthScreen extends StatelessWidget {
   static const authscreen_routename = "/auth-screen";
@@ -57,7 +58,7 @@ class AuthScreen extends StatelessWidget {
                   ),
                 ),
                 Flexible(
-                    flex: phone_size.width > 600 ? 2 : 1, child: AuthCard()),
+                    flex: phone_size.width > 600 ? 2 : 1, child: AuthFields()),
               ],
             ),
           ),
@@ -67,14 +68,14 @@ class AuthScreen extends StatelessWidget {
   }
 }
 
-class AuthCard extends StatefulWidget {
+class AuthFields extends StatefulWidget {
   @override
-  _AuthCardState createState() => _AuthCardState();
+  _AuthFieldsState createState() => _AuthFieldsState();
 }
 
 enum Authmode { login, signup }
 
-class _AuthCardState extends State<AuthCard> {
+class _AuthFieldsState extends State<AuthFields> {
   final _formkey = GlobalKey<FormState>();
   Authmode _authmode = Authmode.login;
   TextEditingController _textEditingController_password =
@@ -97,29 +98,31 @@ class _AuthCardState extends State<AuthCard> {
       if (_authmode == Authmode.login) {
         await Provider.of<Auth>(context, listen: false)
             .authLogin(_authdata["email"], _authdata["password"]);
+        Navigator.push(context, MaterialPageRoute(builder: (_) {
+          return ProductOverViewScreen();
+          // check it again
+        }));
       } else {
         await Provider.of<Auth>(context, listen: false)
             .authSignup(_authdata["email"], _authdata["password"]);
+        Navigator.push(context, MaterialPageRoute(builder: (_) {
+          return ProductOverViewScreen();
+        }));
+        // check it again
       }
     } on HttpException catch (errors) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text(errors.toString()),
-        backgroundColor: Colors.black26,
-
-//         Theme.of(ctx).splashColor,
-      ));
-      // Fluttertoast.showToast(
-      //     msg: "safmknlkdsfsakdl;fm;lsdkmfl;sd",
-      //     toastLength: Toast.LENGTH_SHORT,
-      //     gravity: ToastGravity.CENTER,
-      //     timeInSecForIosWeb: 1,
-      //     backgroundColor: Colors.red,
-      //     textColor: Colors.white,
-      //     fontSize: 16.0);
+      Fluttertoast.showToast(
+          msg: errors.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0);
       print(" this is eror in exception $errors");
     } catch (eror) {
       Fluttertoast.showToast(
-          msg: eror,
+          msg: eror.toString(),
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,

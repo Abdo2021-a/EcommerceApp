@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopapp/Providers/auth.dart';
 import 'package:shopapp/Screens/auth_screen.dart';
+import 'package:shopapp/Widgets/app_drawer.dart';
 
 class ProductOverViewScreen extends StatefulWidget {
   @override
@@ -11,15 +14,9 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: IconButton(
-          onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (_) {
-              return AuthScreen();
-            }));
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
+        title: Text("shop"),
       ),
+      drawer: AppDrawer(),
       body: Center(
         child: Text("homescreen"),
       ),

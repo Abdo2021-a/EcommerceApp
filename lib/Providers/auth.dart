@@ -45,7 +45,7 @@ class Auth with ChangeNotifier {
       var resposedata = json.decode(response.body);
       print("  response of auth   $resposedata");
       if (resposedata["error"] != null) {
-        HttpException(resposedata["error"]["message"]);
+        throw HttpException(resposedata["error"]["message"]);
       }
       _token = resposedata["idToken"];
       _userid = resposedata["localId"];
@@ -82,7 +82,7 @@ class Auth with ChangeNotifier {
       var resposedata = json.decode(response.body);
       print("  response of auth   $resposedata");
       if (resposedata["error"] != null) {
-        HttpException(resposedata["error"]["message"]);
+        throw HttpException(resposedata["error"]["message"]);
       }
       _token = resposedata["idToken"];
       _userid = resposedata["localId"];
@@ -110,6 +110,13 @@ class Auth with ChangeNotifier {
     var prefs = await SharedPreferences.getInstance();
 
     prefs.clear();
+    print("    token $_token");
+    print("  expire date $_expiredate");
+    ;
+    print("   user id$_userid");
+    ;
+    print("prefs    $prefs");
+    ;
   }
 
   autoLogOut() {
