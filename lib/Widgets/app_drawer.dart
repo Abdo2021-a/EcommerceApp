@@ -17,14 +17,14 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
               title: Text("Shop"),
-              leading: Icon(Icons.ac_unit),
+              leading: Icon(Icons.shop),
               onTap: () {
                 Navigator.of(context).pushReplacementNamed('/');
               }),
           Divider(),
           ListTile(
               title: Text("Orders"),
-              leading: Icon(Icons.ac_unit),
+              leading: Icon(Icons.payment_outlined),
               onTap: () {
                 Navigator.of(context)
                     .pushReplacementNamed(OrdersScreen.orderscreen_routename);
@@ -32,7 +32,7 @@ class AppDrawer extends StatelessWidget {
           Divider(),
           ListTile(
               title: Text("Manage Your Order"),
-              leading: Icon(Icons.ac_unit),
+              leading: Icon(Icons.edit),
               onTap: () {
                 Navigator.of(context).pushReplacementNamed(
                     UserProductScreen.userproductscreen_routename);
@@ -40,7 +40,7 @@ class AppDrawer extends StatelessWidget {
           Divider(),
           ListTile(
               title: Text("Log Out"),
-              leading: Icon(Icons.ac_unit),
+              leading: Icon(Icons.logout),
               onTap: () {
                 Provider.of<Auth>(context, listen: false).logOut();
                 Navigator.of(context)

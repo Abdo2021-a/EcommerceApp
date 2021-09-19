@@ -18,7 +18,7 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
       ),
       drawer: AppDrawer(),
       body: Center(
-        child: Text("homescreen"),
+        child: Text("homescreen home screen"),
       ),
     );
   }
