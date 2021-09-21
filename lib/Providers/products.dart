@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shopapp/Models/http_exceptios.dart';
 import 'package:shopapp/Providers/product.dart';
 
 class Products with ChangeNotifier {
@@ -69,8 +70,8 @@ class Products with ChangeNotifier {
     try {
       var res = await http.get(Uri.parse(url));
 
-      final ordersData = json.decode(res.body) as Map<String, dynamic>;
-      if (ordersData == null) {
+      final productsdata = json.decode(res.body) as Map<String, dynamic>;
+      if (productsdata == null) {
         return;
       }
       final urlfav =
@@ -79,13 +80,13 @@ class Products with ChangeNotifier {
       final favouritedata = json.decode(favres.body);
 
       List<Product> loadedproducts = [];
-      ordersData.forEach((prduct_id, productdata) {
+      productsdata.forEach((prduct_id, productdata) {
         loadedproducts.add(Product(
           id: prduct_id,
           description: productdata["description"],
           title: productdata["title"],
           price: productdata["price"],
-          image_url: productdata["imageurl"],
+          image_url: productdata["imageUrl"],
           is_favourite:
               favouritedata == null ? false : favouritedata[prduct_id] ?? false,
         ));
@@ -95,5 +96,76 @@ class Products with ChangeNotifier {
     } catch (eror) {
       throw eror;
     }
+  }
+
+  Future<void> addProduct(Product addproduct) async {
+    final url =
+        "https://shopapp-6acbf-default-rtdb.firebaseio.com/products.json?auth=$authToken";
+    ;
+    try {
+      final res_addproduct = await http.post(Uri.parse(url),
+          body: json.encode({
+            "title": addproduct.title,
+            "description": addproduct.description,
+            "imageUrl": addproduct.image_url,
+            "price": addproduct.price,
+            "creatorId": userId,
+          }));
+      final newproduct = Product(
+        id: json.decode(res_addproduct.body)["name"],
+        description: addproduct.description,
+        image_url: addproduct.image_url,
+        price: addproduct.price,
+        title: addproduct.title,
+      );
+      _items.add(newproduct);
+      notifyListeners();
+    } catch (eror) {
+      throw eror;
+    }
+  }
+
+  Future<void> updateProduct(String id, Product updateproduct) async {
+    final url =
+        "https://shopapp-6acbf-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken";
+
+    try {
+      final product_index = _items.indexWhere((element) => element.id == id);
+      if (product_index > 0) {
+        final resupdate_product = await http.patch(Uri.parse(url),
+            body: json.encode({
+              "title": updateproduct.title,
+              "description": updateproduct.description,
+              "imageUrl": updateproduct.image_url,
+              "price": updateproduct.price,
+            }));
+        _items[product_index] = updateproduct;
+        notifyListeners();
+      } else {
+        return;
+      }
+    } catch (eror) {
+      throw eror;
+    }
+  }
+
+  Future<void> deleteProduct(String id, Product updateproduct) async {
+    final url =
+        "https://shopapp-6acbf-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken";
+    final indexproduct_delete =
+        _items.indexWhere((element) => element.id == id);
+    var exictsproduct_index = _items[indexproduct_delete];
+    _items.removeAt(indexproduct_delete);
+
+    notifyListeners();
+    final res_delete = await http.delete(Uri.parse(url));
+    if (res_delete.statusCode >= 400) {
+      _items.insert(indexproduct_delete, exictsproduct_index);
+      notifyListeners();
+      throw HttpException("cant delete this product");
+    }
+
+    exictsproduct_index = null;
+    notifyListeners();
   }
 }
