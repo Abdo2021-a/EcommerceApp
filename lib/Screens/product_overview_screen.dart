@@ -35,7 +35,9 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
         is_loding = false;
       });
     }).catchError((onError) {
-      print(onError);
+      setState(() {
+        is_loding = false;
+      });
     });
     super.initState();
   }

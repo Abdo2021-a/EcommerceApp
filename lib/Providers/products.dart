@@ -63,39 +63,39 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts([bool filterbyuser = false]) async {
-    // String Filterusers =
-    //     filterbyuser ? ' orderBy="creatorId"&equalTo="$userId"' : '';
-    // final url =
-    //     "https://shopapp-6acbf-default-rtdb.firebaseio.com/products.json?auth=$authToken&$Filterusers";
-    // try {
-    //   var res = await http.get(Uri.parse(url));
+    String Filterusers =
+        filterbyuser ? ' orderBy="creatorId"&equalTo="$userId"' : '';
+    final url =
+        "https://shopapp-6acbf-default-rtdb.firebaseio.com/products.json?auth=$authToken&$Filterusers";
+    try {
+      var res = await http.get(Uri.parse(url));
 
-    //   final productsdata = json.decode(res.body) as Map<String, dynamic>;
-    //   if (productsdata == null) {
-    //     return;
-    //   }
-    //   final urlfav =
-    //       "https://shopapp-6acbf-default-rtdb.firebaseio.com/userFavourites/$userId.json?auth=$authToken";
-    //   final favres = await http.get(Uri.parse(urlfav));
-    //   final favouritedata = json.decode(favres.body);
+      final productsdata = json.decode(res.body) as Map<String, dynamic>;
+      if (productsdata == null) {
+        return;
+      }
+      final urlfav =
+          "https://shopapp-6acbf-default-rtdb.firebaseio.com/userFavourites/$userId.json?auth=$authToken";
+      final favres = await http.get(Uri.parse(urlfav));
+      final favouritedata = json.decode(favres.body);
 
-    // List<Product> loadedproducts = [];
-    // productsdata.forEach((prduct_id, productdata) {
-    //   loadedproducts.add(Product(
-    //     id: prduct_id,
-    //     description: productdata["description"],
-    //     title: productdata["title"],
-    //     price: productdata["price"],
-    //     image_url: productdata["imageUrl"],
-    //     is_favourite:
-    //         favouritedata == null ? false : favouritedata[prduct_id] ?? false,
-    //   ));
-    // });
-    // _items = loadedproducts;
-    // notifyListeners();
-    // } catch (eror) {
-    //   throw eror;
-    // }
+      List<Product> loadedproducts = [];
+      productsdata.forEach((prduct_id, productdata) {
+        loadedproducts.add(Product(
+          id: prduct_id,
+          description: productdata["description"],
+          title: productdata["title"],
+          price: productdata["price"],
+          image_url: productdata["imageUrl"],
+          is_favourite:
+              favouritedata == null ? false : favouritedata[prduct_id] ?? false,
+        ));
+      });
+      _items = loadedproducts;
+      notifyListeners();
+    } catch (eror) {
+      throw eror;
+    }
   }
 
   Future<void> addProduct(Product addproduct) async {
@@ -149,7 +149,7 @@ class Products with ChangeNotifier {
     }
   }
 
-  Future<void> deleteProduct(String id, Product updateproduct) async {
+  Future<void> deleteProduct(String id) async {
     final url =
         "https://shopapp-6acbf-default-rtdb.firebaseio.com/products/$id.json?auth=$authToken";
     final indexproduct_delete =
