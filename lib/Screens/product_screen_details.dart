@@ -11,7 +11,8 @@ class ProductDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final productid = ModalRoute.of(context).settings.arguments;
     final dataof_productid = Provider.of<Products>(context).getMyId(productid);
-    print(productid);
+    print("$productid");
+    print(dataof_productid.image_url);
 
     return Scaffold(
         body: CustomScrollView(
