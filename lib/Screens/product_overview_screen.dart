@@ -66,9 +66,7 @@ class _ProductOverViewScreenState extends State<ProductOverViewScreen> {
                   child: Text("all shop"),
                   value: Filterd_shop.allShop,
                 ),
-                PopupMenuItem(
-                    child: Text("my favoutites"),
-                    value: Filterd_shop.isFvavourite),
+                PopupMenuItem(child: Text("my favoutites"), value: null),
               ],
             ),
             Consumer<CartProvider>(
